@@ -21,6 +21,7 @@ public class MainActivity extends Activity
 	{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+		RootPermission(getPackageCodePath());
 		//初始化控件
 		button = (Button)findViewById(R.id.mainButton1);
 		edittext = (EditText)findViewById(R.id.mainEditText1);
@@ -55,7 +56,7 @@ public class MainActivity extends Activity
 		ShowToast("stop");
 		if(status == true)
 		{
-			
+			Command("stop adbd");
 		}
 	}
 	//启动
@@ -68,7 +69,7 @@ public class MainActivity extends Activity
 			String ip = GetIP();
 			ShowToast(ip);
 			//执行开启命令
-			Cmd("id;su;id;");
+			Command("setprop service.adb.tcp.port 5555;start adbd");
 		}
 	}
 	//执行命令
@@ -92,7 +93,59 @@ public class MainActivity extends Activity
 			 ShowToast(cmdtext);
 		}
 		catch (IOException e)
-		{}
+		{
+			ShowToast("cmd="+e.getMessage());
+		}
+	}
+	public void Command(String cmd)
+	{
+		try
+		{
+			Process p = Runtime.getRuntime().exec("su");
+			OutputStream os = p.getOutputStream();
+			OutputStreamWriter osw = new OutputStreamWriter(os);
+			BufferedWriter bw = new BufferedWriter(osw);
+			bw.write(cmd+"\n");
+			bw.write("exit \n");
+			bw.close();
+			osw.close();
+			os.close();
+		}
+		catch (IOException e)
+		{
+			ShowToast("command="+e.getMessage());
+		}
+	}
+	/**
+	 * 应用程序运行命令获取 Root权限，设备必须已破解(获得ROOT权限)
+	 * 
+	 * @return 应用程序是/否获取Root权限
+	 */
+	public boolean RootPermission(String pkgCodePath) {
+		Process process = null;
+		DataOutputStream os = null;
+		try {
+			String cmd="chmod 777 " + pkgCodePath;
+			process = Runtime.getRuntime().exec("su"); //切换到root帐号
+			os = new DataOutputStream(process.getOutputStream());
+			os.writeBytes(cmd + "\n");
+			os.writeBytes("exit\n");
+			os.flush();
+			process.waitFor();
+		} catch (Exception e) {
+			ShowToast("upgradeRootPermission="+e.getMessage());
+			return false;
+		} finally {
+			try {
+				if (os != null) {
+					os.close();
+				}
+				process.destroy();
+			} catch (Exception e) {
+				ShowToast("upgradeRootPermission-finally"+e.getMessage());
+			}
+		}
+		return true;
 	}
 	//获取ip
 	public String GetIP()
@@ -113,8 +166,11 @@ public class MainActivity extends Activity
 	//显示日志
 	public void ShowToast(String toast)
 	{
-		edittext.setText(edittext.getText()+"\n============\n>> "+toast);
-		//Toast.makeText(getApplicationContext(),toast,Toast.LENGTH_SHORT);
+		if(!toast.equals(""))
+		{
+			edittext.setText(edittext.getText()+"\n============\n>> "+toast);
+			//Toast.makeText(getApplicationContext(),toast,Toast.LENGTH_SHORT);
+		}
 	}
 	public void ShowToast(int toast)
 	{
