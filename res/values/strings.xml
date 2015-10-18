@@ -2,6 +2,12 @@
 <resources>
 
     <string name="hello">Hello World, MainActivity!</string>
-    <string name="app_name">AdbWifiDebug</string>
-
+    <string name="app_name">Wifi真机调试</string>
+	<string name="no_root_msg">请先root，并重启应用！</string>
+	<string name="button_status_open">开启</string>
+	<string name="button_status_close">关闭</string>
+	<string name="debug_status_open">adb wifi 调试开启 \n  请在电脑端 输入 \n adb connect </string>
+	<string name="debug_status_close">adb wifi 调试已停止</string>
+	<string name="no_connect_wifi">请先连接wifi!</string>
+	
 </resources>

@@ -9,6 +9,7 @@ import android.net.*;
 import android.net.wifi.*;
 import java.io.*;
 import java.lang.Process;
+import android.text.method.*;
 
 public class MainActivity extends Activity
 {
@@ -28,11 +29,12 @@ public class MainActivity extends Activity
 		edittext.setCursorVisible(false);
 		edittext.setFocusable(false);
 		edittext.setFocusableInTouchMode(false);
+		
 		//判断是否root
 		boolean root = IsRoot();
 		if(!root)
 		{
-			ShowToast("请先root，并重启应用！");
+			ShowToast(getResources().getString(R.string.no_root_msg));
 			button.setEnabled(false);
 			return ;
 		}
@@ -44,13 +46,13 @@ public class MainActivity extends Activity
 					// TODO: Imtplement this method
 					if(status == false)
 					{
-						button.setText("关闭");
+						button.setText(getResources().getString(R.string.button_status_close));
 						StartAdbWifiDebug();
 						status = true;
 					}
 					else
 					{
-						button.setText("开启");
+						button.setText(getResources().getString(R.string.button_status_open));
 						StopAdbWifiDebug();
 						status = false;
 					}
@@ -64,7 +66,7 @@ public class MainActivity extends Activity
 		if(status == true)
 		{
 			Command("stop adbd");
-			ShowToast("adb wifi 调试已停止");
+			ShowToast(getResources().getString(R.string.debug_status_close));
 		}
 	}
 	//启动
@@ -76,12 +78,12 @@ public class MainActivity extends Activity
 			String ip = GetIP();
 			if(ip.equals(""))
 			{
-				ShowToast("请先连接wifi!");
+				ShowToast(getResources().getString(R.string.no_connect_wifi));
 				return ;
 			}
 			//执行开启命令
 			Command("setprop service.adb.tcp.port 5555;start adbd");
-			ShowToast("adb wifi 调试开启 \n  请在电脑端 输入 \n adb connect "+ip);
+			ShowToast(getResources().getString(R.string.debug_status_open)+" "+ip);
 		}
 	}
 	//执行命令
@@ -155,6 +157,8 @@ public class MainActivity extends Activity
 		if(!toast.equals(""))
 		{
 			edittext.setText(edittext.getText()+"\n============\n>> "+toast);
+			
+			edittext.setSelection(edittext.getText().length(), edittext.getText().length());
 		}
 	}
 	public void ShowToast(int toast)

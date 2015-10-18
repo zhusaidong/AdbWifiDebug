@@ -4,22 +4,29 @@
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
 	android:gravity="center"
-	android:orientation="vertical">
+	android:orientation="vertical"
+	android:background="#989898">
 
 	<Button
 		android:layout_height="wrap_content"
-		style="?android:attr/buttonStyleSmall"
-		android:text="开启"
+		android:text="@string/button_status_open"
 		android:layout_width="wrap_content"
 		android:id="@+id/mainButton1"
-		android:layout_marginTop="40dp"/>
+		android:layout_marginTop="40dp"
+		android:textSize="30sp"
+		android:layout_marginBottom="30dp"/>
 
 	<EditText
 		android:layout_height="match_parent"
 		android:inputType="textMultiLine"
 		android:ems="10"
 		android:layout_width="match_parent"
-		android:id="@+id/mainEditText1"/>
+		android:id="@+id/mainEditText1"
+		android:gravity="top|left"
+		android:background="#5A5757"
+		android:layout_marginLeft="10dp"
+		android:layout_marginRight="10dp"
+		android:layout_marginBottom="10dp"/>
 
 </LinearLayout>
 
