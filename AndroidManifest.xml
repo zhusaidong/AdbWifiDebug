@@ -13,7 +13,7 @@
 	
     <application
         android:allowBackup="false"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/wifidebug"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity

@@ -14,7 +14,8 @@
 		android:id="@+id/mainButton1"
 		android:layout_marginTop="40dp"
 		android:textSize="30sp"
-		android:layout_marginBottom="30dp"/>
+		android:layout_marginBottom="30dp"
+		android:textColor="#FFFFFF"/>
 
 	<EditText
 		android:layout_height="match_parent"

@@ -25,14 +25,14 @@ public class MainActivity extends Activity
 		//初始化控件
 		button = (Button)findViewById(R.id.mainButton1);
 		edittext = (EditText)findViewById(R.id.mainEditText1);
-		
+
 		edittext.setCursorVisible(false);
 		edittext.setFocusable(false);
 		edittext.setFocusableInTouchMode(false);
-		
+
 		//判断是否root
 		boolean root = IsRoot();
-		if(!root)
+		if (!root)
 		{
 			ShowToast(getResources().getString(R.string.no_root_msg));
 			button.setEnabled(false);
@@ -44,7 +44,7 @@ public class MainActivity extends Activity
 				public void onClick(View p1)
 				{
 					// TODO: Imtplement this method
-					if(status == false)
+					if (status == false)
 					{
 						button.setText(getResources().getString(R.string.button_status_close));
 						StartAdbWifiDebug();
@@ -57,13 +57,13 @@ public class MainActivity extends Activity
 						status = false;
 					}
 				}
-		});
+			});
     }
 	//停止
 	public void StopAdbWifiDebug()
 	{
 		// TODO: Implement this method
-		if(status == true)
+		if (status == true)
 		{
 			Command("stop adbd");
 			ShowToast(getResources().getString(R.string.debug_status_close));
@@ -73,17 +73,17 @@ public class MainActivity extends Activity
 	public void StartAdbWifiDebug()
 	{
 		// TODO: Implement this method
-		if(status == false)
+		if (status == false)
 		{
 			String ip = GetIP();
-			if(ip.equals(""))
+			if (ip.equals(""))
 			{
 				ShowToast(getResources().getString(R.string.no_connect_wifi));
 				return ;
 			}
 			//执行开启命令
 			Command("setprop service.adb.tcp.port 5555;start adbd");
-			ShowToast(getResources().getString(R.string.debug_status_open)+" "+ip);
+			ShowToast(getResources().getString(R.string.debug_status_open) + " " + ip);
 		}
 	}
 	//执行命令
@@ -95,7 +95,7 @@ public class MainActivity extends Activity
 			OutputStream os = p.getOutputStream();
 			OutputStreamWriter osw = new OutputStreamWriter(os);
 			BufferedWriter bw = new BufferedWriter(osw);
-			bw.write(cmd+"\n");
+			bw.write(cmd + "\n");
 			bw.write("exit \n");
 			bw.close();
 			osw.close();
@@ -110,7 +110,8 @@ public class MainActivity extends Activity
 	 * 
 	 * @return 应用程序是/否获取Root权限
 	 */
-	private boolean IsRoot(){
+	private boolean IsRoot()
+	{
 		Process process = null;
 		try
 		{
@@ -118,12 +119,13 @@ public class MainActivity extends Activity
 			process.getOutputStream().write("exit\n".getBytes());
 			process.getOutputStream().flush();
 			int i = process.waitFor();
-			if(0 == i)
+			if (0 == i)
 			{
 				process = Runtime.getRuntime().exec("su");
 				return true;
 			}
-		} catch (Exception e)
+		}
+		catch (Exception e)
 		{
 			return false;
 		}
@@ -134,13 +136,13 @@ public class MainActivity extends Activity
 	{
 		// TODO: Implement this method
 		WifiManager wm = (WifiManager) getApplicationContext().getSystemService(getApplicationContext().WIFI_SERVICE);
-		if(!wm.isWifiEnabled())
+		if (!wm.isWifiEnabled())
 		{
 			wm.setWifiEnabled(true);
 		}
 		WifiInfo wi = wm.getConnectionInfo();
 		int ip = wi.getIpAddress();
-		if(ip == 0)
+		if (ip == 0)
 		{
 			return "";
 		}
@@ -149,20 +151,20 @@ public class MainActivity extends Activity
 	//int转ip
 	private String IntToIp(int i) 
 	{
-		return (i & 0xFF ) + "." + ((i >> 8 ) & 0xFF) + "." + ((i >> 16 ) & 0xFF) + "." + ( i >> 24 & 0xFF) ;
+		return (i & 0xFF) + "." + ((i >> 8) & 0xFF) + "." + ((i >> 16) & 0xFF) + "." + (i >> 24 & 0xFF) ;
 	}
 	//显示
 	public void ShowToast(String toast)
 	{
-		if(!toast.equals(""))
+		if (!toast.equals(""))
 		{
-			edittext.setText(edittext.getText()+"\n============\n>> "+toast);
-			
+			edittext.setText(edittext.getText() + "\n============\n>> " + toast);
+
 			edittext.setSelection(edittext.getText().length(), edittext.getText().length());
 		}
 	}
 	public void ShowToast(int toast)
 	{
-		ShowToast(toast+"");
+		ShowToast(toast + "");
 	}
 }
